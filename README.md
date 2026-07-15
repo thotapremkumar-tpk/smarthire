@@ -65,13 +65,20 @@ smarthire/
 
 ## Quick Start
 
+Trained models are included in the repo via [Git LFS](https://git-lfs.com), so you can clone and run directly — no retraining or dataset download needed.
+
 ```bash
-# 1. Clone the repo
+# 0. Install Git LFS (one-time, if you don't have it)
+#    macOS: brew install git-lfs      Windows/Linux: https://git-lfs.com
+git lfs install
+
+# 1. Clone the repo (this also pulls the model files via LFS)
 git clone https://github.com/thotapremkumar-tpk/smarthire.git
 cd smarthire
 
-# 2. Create virtual environment
-python -m venv venv
+# 2. Create virtual environment (Python 3.12 recommended — Python 3.13
+#    lacks prebuilt wheels for scipy==1.13.1 and will fail to build)
+python3.12 -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
 
 # 3. Install dependencies
@@ -80,12 +87,14 @@ pip install -r requirements.txt
 # 4. Download NLTK data
 python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
 
-# 5. Place datasets in data/raw/
-#    - UpdatedResumeDataSet.csv
-#    - jobs_dataset.csv
-
-# 6. Run the Streamlit app
+# 5. Run the Streamlit app
 streamlit run app/streamlit_app.py
+```
+
+Only needed if you want to retrain the models from scratch:
+```bash
+# Place datasets in data/raw/, then:
+python train_all.py
 ```
 
 ---

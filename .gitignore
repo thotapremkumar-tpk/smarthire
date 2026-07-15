@@ -21,8 +21,7 @@ env/
 # Data (never commit raw data)
 data/
 
-# Trained model files
-models/*.pkl
+# Trained model files (tracked via Git LFS instead, see .gitattributes)
 models/*.joblib
 models/*.h5
 
