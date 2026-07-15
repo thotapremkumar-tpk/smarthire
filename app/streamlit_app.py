@@ -42,42 +42,42 @@ st.markdown("""
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
     .stApp {
-        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        color: #e0e0e0;
+        background: linear-gradient(135deg, #f5f7ff 0%, #eef2ff 50%, #faf5ff 100%);
+        color: #1e293b;
     }
     .glass-card {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(15,23,42,0.08);
         border-radius: 16px;
         padding: 1.5rem;
         backdrop-filter: blur(12px);
         margin-bottom: 1rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 32px rgba(15,23,42,0.08);
     }
     .hero {
         text-align: center;
         padding: 2.5rem 1rem;
-        background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2));
+        background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1));
         border-radius: 20px;
-        border: 1px solid rgba(168,85,247,0.3);
+        border: 1px solid rgba(168,85,247,0.25);
         margin-bottom: 2rem;
     }
     .hero h1 {
         font-size: 3rem; font-weight: 700;
-        background: linear-gradient(90deg, #a78bfa, #60a5fa, #f472b6);
+        background: linear-gradient(90deg, #7c3aed, #2563eb, #db2777);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
     }
-    .hero p { font-size: 1.1rem; color: #94a3b8; margin-top: 0.5rem; }
+    .hero p { font-size: 1.1rem; color: #64748b; margin-top: 0.5rem; }
 
     .score-badge {
         display: inline-block; padding: 0.3rem 0.8rem;
         border-radius: 999px; font-weight: 600; font-size: 0.85rem;
     }
-    .score-high   { background:rgba(52,211,153,0.2);  color:#34d399; border:1px solid #34d399; }
-    .score-medium { background:rgba(251,191,36,0.2);  color:#fbbf24; border:1px solid #fbbf24; }
-    .score-low    { background:rgba(239,68,68,0.2);   color:#ef4444; border:1px solid #ef4444; }
+    .score-high   { background:rgba(5,150,105,0.12);  color:#059669; border:1px solid #059669; }
+    .score-medium { background:rgba(180,83,9,0.12);   color:#b45309; border:1px solid #b45309; }
+    .score-low    { background:rgba(220,38,38,0.12);  color:#dc2626; border:1px solid #dc2626; }
 
     .stButton > button {
         background: linear-gradient(135deg, #6366f1, #a855f7);
@@ -87,24 +87,24 @@ st.markdown("""
     }
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+        box-shadow: 0 10px 30px rgba(99,102,241,0.3);
     }
     .stProgress > div > div { background: linear-gradient(90deg, #6366f1, #a855f7); }
     [data-testid="stMetric"] {
-        background: rgba(255,255,255,0.05); border-radius: 12px;
-        padding: 1rem; border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.6); border-radius: 12px;
+        padding: 1rem; border: 1px solid rgba(15,23,42,0.08);
     }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
         background: linear-gradient(135deg, #6366f1, #a855f7);
         border-radius: 8px 8px 0 0; color: white;
     }
     [data-testid="stFileUploader"] {
-        background: rgba(255,255,255,0.03);
+        background: rgba(255,255,255,0.5);
         border: 2px dashed rgba(99,102,241,0.4);
         border-radius: 12px; padding: 1rem;
     }
-    h2, h3 { color: #e2e8f0; }
-    hr { border-color: rgba(255,255,255,0.1); }
+    h2, h3 { color: #1e293b; }
+    hr { border-color: rgba(15,23,42,0.1); }
 </style>
 """, unsafe_allow_html=True)
 
@@ -200,7 +200,7 @@ def render_upload() -> str | None:
     with col2:
         st.markdown("""
         <div class="glass-card" style="padding:1rem;text-align:center;">
-            <p style="color:#94a3b8;font-size:0.85rem;margin:0;">
+            <p style="color:#64748b;font-size:0.85rem;margin:0;">
             ✅ PDF supported<br>✅ DOCX supported<br>✅ TXT supported<br>🔒 Processed locally
             </p>
         </div>
@@ -248,7 +248,7 @@ def render_category(clean_resume: str, models: dict):
     st.markdown(f"""
     <div class="glass-card">
         <h3 style="margin:0 0 0.5rem 0;">🏷️ Predicted Job Category</h3>
-        <span style="font-size:1.5rem;font-weight:700;color:#a78bfa;">{predicted}</span>
+        <span style="font-size:1.5rem;font-weight:700;color:#7c3aed;">{predicted}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -273,7 +273,7 @@ def render_category(clean_resume: str, models: dict):
                 xaxis_title="Probability (%)",
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#e0e0e0"),
+                font=dict(color="#1e293b"),
                 height=300,
                 margin=dict(l=10, r=10, t=40, b=10),
             )
@@ -321,32 +321,38 @@ def render_recommendations(clean_resume: str, models: dict, top_n: int = TOP_N_J
     for _, row in results.iterrows():
         sc      = float(row.get("match_score", 0))
         badge   = score_class(sc)
-        title   = str(row.get("title",       "Unknown Role"))
-        company = str(row.get("company",     ""))
-        loc     = str(row.get("location",    ""))
-        exp     = str(row.get("experience",  ""))
-        desc    = str(row.get("description", ""))[:300]
+        title   = " ".join(str(row.get("title",       "Unknown Role")).split())
+        company = " ".join(str(row.get("company",     "")).split())
+        loc     = " ".join(str(row.get("location",    "")).split())
+        exp     = " ".join(str(row.get("experience",  "")).split())
+        desc    = " ".join(str(row.get("description", "")).split())[:300]
 
-        st.markdown(f"""
+        meta_bits = [
+            b for b in [
+                "🏢 " + company if company and company != "nan" else "",
+                "📍 " + loc if loc and loc != "nan" else "",
+                "⏱ " + exp if exp and exp != "nan" else "",
+            ] if b
+        ]
+        meta_line = "&nbsp;|&nbsp; ".join(meta_bits)
+        ellipsis = "…" if len(str(row.get("description", ""))) > 300 else ""
+
+        card_html = f"""
         <div class="glass-card">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
                 <div>
-                    <span style="font-size:1.1rem;font-weight:600;color:#e2e8f0;">
-                        #{int(row['rank'])}&nbsp; {title}
-                    </span><br/>
-                    <span style="color:#94a3b8;font-size:0.85rem;">
-                        {"🏢 " + company if company and company != "nan" else ""}
-                        {"&nbsp;|&nbsp; 📍 " + loc if loc and loc != "nan" else ""}
-                        {"&nbsp;|&nbsp; ⏱ " + exp if exp and exp != "nan" else ""}
-                    </span>
+                    <span style="font-size:1.1rem;font-weight:600;color:#1e293b;">#{int(row['rank'])}&nbsp; {title}</span><br/>
+                    <span style="color:#64748b;font-size:0.85rem;">{meta_line}</span>
                 </div>
                 <span class="score-badge {badge}">{sc}% Match</span>
             </div>
-            <p style="margin-top:0.75rem;color:#94a3b8;font-size:0.9rem;line-height:1.5;">
-                {desc}{"…" if len(str(row.get("description", ""))) > 300 else ""}
-            </p>
+            <p style="margin-top:0.75rem;color:#64748b;font-size:0.9rem;line-height:1.5;">{desc}{ellipsis}</p>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        card_html = "\n".join(
+            line for line in (l.strip() for l in card_html.strip().splitlines()) if line
+        )
+        st.markdown(card_html, unsafe_allow_html=True)
 
 
 # ── UI: Skill Gap Tab ─────────────────────────────────────────────────────────
@@ -401,22 +407,22 @@ def render_skill_gap(clean_resume: str, models: dict):
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=match_pct,
-        title={"text": "Skill Match %", "font": {"color": "#e2e8f0"}},
+        title={"text": "Skill Match %", "font": {"color": "#1e293b"}},
         gauge={
-            "axis":    {"range": [0, 100], "tickcolor": "#94a3b8"},
+            "axis":    {"range": [0, 100], "tickcolor": "#64748b"},
             "bar":     {"color": "#a855f7"},
             "bgcolor": "rgba(0,0,0,0)",
             "steps": [
-                {"range": [0,  40], "color": "rgba(239,68,68,0.2)"},
-                {"range": [40, 70], "color": "rgba(251,191,36,0.2)"},
-                {"range": [70,100], "color": "rgba(52,211,153,0.2)"},
+                {"range": [0,  40], "color": "rgba(220,38,38,0.15)"},
+                {"range": [40, 70], "color": "rgba(180,83,9,0.15)"},
+                {"range": [70,100], "color": "rgba(5,150,105,0.15)"},
             ],
         },
-        number={"suffix": "%", "font": {"color": "#e2e8f0", "size": 40}},
+        number={"suffix": "%", "font": {"color": "#1e293b", "size": 40}},
     ))
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#e2e8f0"),
+        font=dict(color="#1e293b"),
         height=280, margin=dict(t=20, b=20),
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -426,7 +432,7 @@ def render_skill_gap(clean_resume: str, models: dict):
         st.markdown("#### ✅ Skills You Have")
         if found:
             badges = " ".join(
-                f'<span style="background:rgba(52,211,153,0.15);color:#34d399;'
+                f'<span style="background:rgba(5,150,105,0.12);color:#059669;'
                 f'padding:0.2rem 0.6rem;border-radius:999px;margin:0.2rem;'
                 f'display:inline-block;font-size:0.85rem;">{s}</span>'
                 for s in found
@@ -439,7 +445,7 @@ def render_skill_gap(clean_resume: str, models: dict):
         st.markdown("#### ❌ Skills to Develop")
         if missing:
             badges = " ".join(
-                f'<span style="background:rgba(239,68,68,0.15);color:#ef4444;'
+                f'<span style="background:rgba(220,38,38,0.12);color:#dc2626;'
                 f'padding:0.2rem 0.6rem;border-radius:999px;margin:0.2rem;'
                 f'display:inline-block;font-size:0.85rem;">{s}</span>'
                 for s in missing
@@ -456,10 +462,10 @@ def render_sidebar() -> int:
         st.markdown("""
         <div style="text-align:center;padding:1rem 0;">
             <span style="font-size:2rem;">🎯</span>
-            <h2 style="margin:0.5rem 0 0;color:#a78bfa;">SmartHire</h2>
+            <h2 style="margin:0.5rem 0 0;color:#7c3aed;">SmartHire</h2>
             <p style="color:#64748b;font-size:0.8rem;margin:0;">ML Job Portal</p>
         </div>
-        <hr style="border-color:rgba(255,255,255,0.1);">
+        <hr style="border-color:rgba(15,23,42,0.1);">
         """, unsafe_allow_html=True)
 
         st.markdown("#### 🤖 Model Status")
@@ -472,22 +478,22 @@ def render_sidebar() -> int:
         }
         for name, ready in checks.items():
             icon  = "✅" if ready else "⚠️"
-            color = "#34d399" if ready else "#fbbf24"
+            color = "#059669" if ready else "#b45309"
             st.markdown(f'<p style="color:{color};margin:0.3rem 0;">{icon} {name}</p>',
                         unsafe_allow_html=True)
 
         if not all(checks.values()):
             st.markdown("""
-            <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);
+            <div style="background:rgba(180,83,9,0.1);border:1px solid rgba(180,83,9,0.3);
                         border-radius:10px;padding:0.8rem;margin-top:1rem;
-                        font-size:0.83rem;color:#fbbf24;">
+                        font-size:0.83rem;color:#b45309;">
             ⚠️ Missing models.<br><br>
             Run from project root:<br>
             <code>python train_all.py</code>
             </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("<hr style='border-color:rgba(255,255,255,0.1);'>", unsafe_allow_html=True)
+        st.markdown("<hr style='border-color:rgba(15,23,42,0.1);'>", unsafe_allow_html=True)
         st.markdown("#### ⚙️ Settings")
         top_n = st.slider("Top N Jobs", min_value=5, max_value=20, value=TOP_N_JOBS)
         return top_n
@@ -529,8 +535,8 @@ def main():
             col.markdown(f"""
             <div class="glass-card" style="text-align:center;padding:2rem 1rem;">
                 <div style="font-size:2.5rem;">{icon}</div>
-                <h3 style="margin:0.5rem 0;color:#e2e8f0;">{title}</h3>
-                <p style="color:#94a3b8;font-size:0.9rem;line-height:1.5;">{desc}</p>
+                <h3 style="margin:0.5rem 0;color:#1e293b;">{title}</h3>
+                <p style="color:#64748b;font-size:0.9rem;line-height:1.5;">{desc}</p>
             </div>
             """, unsafe_allow_html=True)
 

@@ -8,3 +8,11 @@ showErrorDetails = false
 
 [browser]
 gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#7c3aed"
+backgroundColor = "#f8f9ff"
+secondaryBackgroundColor = "#eef2ff"
+textColor = "#1e293b"
+font = "sans serif"
