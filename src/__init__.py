@@ -1,0 +1,3 @@
+"""
+SmartHire — source package init.
+"""
