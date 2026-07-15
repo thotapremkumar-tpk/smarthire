@@ -160,15 +160,19 @@ def load_models():
     else:
         models["classifier"] = None
 
-    # TF-IDF vectorizer + job matrix
-    npz_path = MODELS_DIR / "job_tfidf_matrix.npz"
-    if TFIDF_PATH.exists() and npz_path.exists():
+    # TF-IDF vectorizer (JOB vectorizer — 8000 features) + job matrix
+    npz_path     = MODELS_DIR / "job_tfidf_matrix.npz"
+    job_vec_path = MODELS_DIR / "job_tfidf_vectorizer.pkl"
+    corpus_path  = MODELS_DIR / "job_corpus_sample.pkl"
+    if job_vec_path.exists() and npz_path.exists():
         from scipy.sparse import load_npz
-        models["vectorizer"]  = joblib.load(TFIDF_PATH)
-        models["job_matrix"]  = load_npz(str(npz_path))
+        models["vectorizer"]    = joblib.load(job_vec_path)   # 8000-feature job vectorizer
+        models["job_matrix"]    = load_npz(str(npz_path))     # (30000, 8000)
+        models["job_corpus"]    = joblib.load(corpus_path) if corpus_path.exists() else None
     else:
-        models["vectorizer"]  = None
-        models["job_matrix"]  = None
+        models["vectorizer"]    = None
+        models["job_matrix"]    = None
+        models["job_corpus"]    = None
 
     # Cluster model
     if CLUSTER_MODEL_PATH.exists():
@@ -301,7 +305,7 @@ def render_category(clean_text_val: str, models: dict):
                 height=300,
                 margin=dict(l=10, r=10, t=40, b=10),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True)  # noqa: deprecated in newer Streamlit
         except Exception:
             pass
 
@@ -312,19 +316,26 @@ def render_recommendations(clean_resume: str, models: dict, corpus: pd.DataFrame
     """Display top-N job recommendations."""
     st.markdown("### 💼 Top Job Matches")
 
-    vectorizer = models.get("vectorizer")
-    job_matrix = models.get("job_matrix")
+    vectorizer  = models.get("vectorizer")
+    job_matrix  = models.get("job_matrix")
+    # Use the sampled corpus that aligns with the job matrix rows
+    job_corpus  = models.get("job_corpus") if models.get("job_corpus") is not None else corpus
 
-    if vectorizer is None or job_matrix is None or corpus is None:
-        st.warning("⚠️ Job index not built yet. Run notebook 03 first.")
+    if vectorizer is None or job_matrix is None:
+        st.warning("⚠️ Job index not built yet. Run train_all.py first.")
+        return
+
+    if job_corpus is None:
+        st.warning("⚠️ Job corpus not found.")
         return
 
     with st.spinner("🔎 Finding best matches …"):
         from sklearn.metrics.pairwise import cosine_similarity
-        resume_vec = vectorizer.transform([clean_resume])
+        resume_vec = vectorizer.transform([clean_resume])   # uses 8000-feature vocab
         scores     = cosine_similarity(resume_vec, job_matrix).flatten()
         top_idx    = np.argsort(scores)[::-1][:TOP_N_JOBS]
-        results    = corpus.iloc[top_idx].copy()
+        # Index into the sampled corpus (same 30K rows as the matrix)
+        results    = job_corpus.iloc[top_idx].copy().reset_index(drop=True)
         results["match_score"] = (scores[top_idx] * 100).round(1)
         results["rank"]        = range(1, len(top_idx) + 1)
 
@@ -367,9 +378,10 @@ def render_skill_gap(clean_resume: str, models: dict, corpus: pd.DataFrame | Non
     cluster_model = models.get("cluster_model")
     vectorizer    = models.get("vectorizer")
     job_matrix    = models.get("job_matrix")
+    job_corpus    = models.get("job_corpus") if models.get("job_corpus") is not None else corpus
 
-    if any(v is None for v in [cluster_model, vectorizer, job_matrix, corpus]):
-        st.warning("⚠️ Cluster model not trained yet. Run notebook 04 first.")
+    if any(v is None for v in [cluster_model, vectorizer, job_matrix]):
+        st.warning("⚠️ Cluster model not trained yet. Run train_all.py first.")
         return
 
     with st.spinner("📊 Generating skill-gap report …"):
@@ -410,7 +422,7 @@ def render_skill_gap(clean_resume: str, models: dict, corpus: pd.DataFrame | Non
         height=280,
         margin=dict(t=20, b=20),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)  # noqa: deprecated in newer Streamlit
 
     col_a, col_b = st.columns(2)
     with col_a:
